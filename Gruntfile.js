@@ -11,8 +11,14 @@ module.exports = function(grunt) {
       }
     },
     sshexec: {
-      deploy: {
-        command: ['cd /home/ec2-user', 'rm -r test', 'mkdir test', 'rm test.js', 'touch test.js'].join(' && '),
+      serverstart: {
+        command: ['cd /home/ec2-user/server', './node_modules/forever/bin/forever start index.js'].join(' && '),
+        options: {
+          config: 'myserver'
+        }
+      },
+      serverstop: {
+        command: ['cd /home/ec2-user/server', './node_modules/forever/bin/forever stop index.js'].join(' && '),
         options: {
           config: 'myserver'
         }
@@ -20,7 +26,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', ['sshexec:deploy']);
+  grunt.registerTask('serverstart', ['sshexec:serverstart']);
+  grunt.registerTask('serverstop', ['sshexec:serverstop']);
   grunt.loadNpmTasks('grunt-ssh');
 
 };
